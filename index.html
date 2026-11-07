@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Security: this page may only run its own script (app.js), talk to the Discogs API, and show Discogs cover images. Nothing else. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.discogs.com; connect-src https://api.discogs.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Disc Logs</title>
+<meta name="description" content="A free play tracker for your Discogs record collection. No sign-in; your plays stay on your phone.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Disc Logs">
+<meta name="theme-color" content="#eef0f2">
+<style>
+:root{--bg:#eef0f2;--panel:#fff;--ink:#15191e;--muted:#5d6670;--line:#d9dde2;--blue:#1f4fd1;--blue2:#173fb0;--gold:#c99a1a;--body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 var(--body);-webkit-text-size-adjust:100%}
+main{max-width:640px;margin:0 auto;padding:16px 14px 90px;display:flex;flex-direction:column;gap:14px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px}
+h1{margin:0;display:flex;align-items:center;gap:12px;font:800 clamp(1.4rem,7.6vw,2.1rem)/1 var(--body);letter-spacing:-.01em;white-space:nowrap}
+.disc{width:34px;height:34px;border-radius:50%;background:var(--ink);display:inline-flex;align-items:center;justify-content:center;flex:none}
+.disc::after{content:"";width:13px;height:13px;border-radius:50%;background:radial-gradient(circle,#15191e 0 2px,var(--gold) 2.6px)}
+.menuBtn{width:44px;height:44px;flex:none;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.menuBtn[aria-expanded="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px}
+.stat b{display:block;font:600 1.5rem/1.1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.stat span{color:var(--muted);font-size:.85rem}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:5px}
+.tabs button{border:0;background:none;padding:11px 4px;border-radius:8px;font:600 .98rem var(--body);color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:#fff}
+[hidden]{display:none!important}
+.qwrap{position:relative}
+.search,.field{width:100%;font:400 1rem var(--body);padding:13px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink)}
+.qwrap .search{padding-right:46px}
+.search::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
+.qclear{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:0;background:var(--line);color:var(--ink);font:600 1.15rem var(--body);line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.search:focus,.field:focus,button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+.hint{color:var(--muted);font-size:.92rem;margin:0}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.list li{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.list li.empty,.list li.block{display:block}
+.list li.empty{color:var(--muted)}
+.cov{width:56px;height:56px;border-radius:6px;object-fit:cover;background:#d5d9de;display:block}
+.cov.none{display:flex;align-items:center;justify-content:center}
+.cov.none::after{content:"";width:18px;height:18px;border-radius:50%;background:#59616b;box-shadow:0 0 0 6px #b9bfc6}
+.t{font-weight:600;line-height:1.25}
+.a{opacity:.85;line-height:1.25}
+.m{color:var(--muted);font-size:.85rem;line-height:1.35}
+.play{border:0;background:var(--blue);color:#fff;font:600 .9rem var(--body);border-radius:10px;padding:9px 12px;min-width:92px;cursor:pointer;line-height:1.15;text-align:center}
+.play:active{background:var(--blue2)}
+.play small{display:block;font-weight:400;font-size:.75rem;opacity:.92;margin-top:2px}
+.ghost{border:1px solid var(--line);background:var(--panel);color:var(--ink);font:500 .88rem var(--body);border-radius:10px;padding:8px 12px;cursor:pointer}
+.rbtns{display:flex;flex-direction:column;gap:6px;align-items:stretch}
+.rank{font:600 1rem ui-monospace,Menlo,monospace;color:var(--muted)}
+.count{font:700 1.2rem ui-monospace,Menlo,monospace;text-align:right}
+.menuPanel{display:flex;flex-direction:column;gap:10px;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:10px}
+.menuHead{display:flex;justify-content:space-between;align-items:center;padding:2px 4px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+details>summary{cursor:pointer;font-weight:700;font-size:1.05rem}
+.box{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.box label{display:flex;flex-direction:column;gap:4px;font-size:.85rem;color:var(--muted)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.note{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0}
+.cartAlert{border-color:#d98a1f;cursor:pointer}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue)}
+.bar i.warn{background:#d98a1f}.bar i.due{background:#c0392b}
+#cartBox[class*="lvl-"]>summary{margin:-12px -14px;padding:12px 14px;border-radius:11px}
+#cartBox[open][class*="lvl-"]>summary{margin-bottom:0;border-radius:11px 11px 0 0}
+#cartBox.lvl-yellow{border-color:#e0b43a}#cartBox.lvl-yellow>summary{background:#f2c94c;color:#3a2c00}
+#cartBox.lvl-red{border-color:#b8432f}#cartBox.lvl-red>summary{background:#c8553d;color:#fff}
+#cartBox.lvl-fire{border-color:#a3141c}#cartBox.lvl-fire>summary{background:#ce2029;color:#fff}
+#cartLeft{font-weight:500}
+.life{color:var(--ink)}
+.chip{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 7px;border-radius:99px;background:#e7ecfb;color:var(--blue);margin-left:6px;vertical-align:middle}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:12px;padding:10px 12px 10px 16px;display:flex;align-items:center;gap:10px;max-width:calc(100% - 24px);box-shadow:0 6px 24px rgba(0,0,0,.25);z-index:5}
+.toast button{border:1px solid rgba(255,255,255,.35);background:none;color:#fff;border-radius:8px;padding:7px 10px;font:600 .85rem var(--body);cursor:pointer;white-space:nowrap}
+#toastMsg{font-size:.92rem}
+a{color:var(--blue)}
+footer{color:var(--muted);font-size:.8rem;text-align:center}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="topbar">
+      <h1><span class="disc" aria-hidden="true"></span>Disc Logs</h1>
+      <button type="button" class="menuBtn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="menu"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+  </header>
+
+  <div class="menuPanel" id="menu" hidden>
+    <div class="menuHead"><span class="t">Menu</span><button type="button" class="ghost" id="menuClose">Close</button></div>
+    <details id="findBox">
+      <summary>Playing something new? Add it here</summary>
+      <form id="findForm" class="box">
+        <span class="m">Fill in any of these. The more you give, the closer the match.</span>
+        <input class="field" id="fArtist" placeholder="Artist" autocomplete="off">
+        <input class="field" id="fTitle" placeholder="Title" autocomplete="off">
+        <input class="field" id="fBarcode" placeholder="Barcode number" inputmode="numeric" autocomplete="off">
+        <input class="field" id="fMatrix" placeholder="Runout / matrix (from the dead wax)" autocomplete="off">
+        <input class="field" id="fYear" placeholder="Release year" inputmode="numeric" autocomplete="off">
+        <button class="play" type="submit">Find it on Discogs</button>
+        <span class="m" id="findMsg" role="status"></span>
+      </form>
+      <ul class="list" id="findList" style="margin-top:10px" hidden></ul>
+      <div id="manualBox" class="box" hidden>
+        <span class="m">Not on Discogs? You can still log it with the artist and title above.</span>
+        <div class="row"><button class="ghost" type="button" id="manualBtn">Log it anyway</button></div>
+      </div>
+    </details>
+    <details id="collBox">
+      <summary>Your collection and backup</summary>
+      <div class="box">
+        <span class="m" id="libLine"></span>
+        <div class="row"><button class="play" type="button" id="refreshBtn">Update collection</button><button class="ghost" type="button" id="changeUser">Change username</button></div>
+        <span class="m">Your plays are saved only on this phone or computer. Save a backup now and then, and use it to move your plays to a new device.</span>
+        <div class="row"><button class="ghost" type="button" id="backupBtn">Save a backup</button><label class="ghost" style="display:inline-block;color:var(--ink);font-size:.88rem">Restore a backup<input type="file" id="restoreFile" accept="application/json,.json" hidden></label></div>
+        <span class="m" id="backupMsg" role="status"></span>
+      </div>
+    </details>
+    <details id="cartBox">
+      <summary>Cartridge<span id="cartLeft"></span></summary>
+      <div class="box">
+        <div class="t" id="cartModel"></div>
+        <div class="bar"><i id="cartBar" style="width:0%"></i></div>
+        <span class="m" id="cartLine"></span>
+        <span class="m">Hours are an estimate: each logged play counts as the minutes per play below, and a play marked one side counts as half. Type your cartridge's model and Disc Logs sets the stylus shape and expected life for many popular ones, using Audio-Technica's published figures for each shape. If yours isn't recognized, pick the shape yourself; it's in the maker's specs. Disc Logs reminds you at 80%.</span>
+        <form id="cartSettings" class="box">
+          <label>Date this cartridge went in (leave blank if you don't know)<input class="field" id="cInst" type="date"></label>
+          <label>Stylus shape<select class="field" id="cShape"><option value="unknown">Not sure</option><option value="conical">Conical / spherical (about 400 hours)</option><option value="elliptical">Elliptical (about 300 hours)</option><option value="shibata">Shibata (about 800 hours)</option><option value="line">Line contact / Fine Line (about 800 hours)</option><option value="microline">MicroLine / Micro-ridge / Replicant (about 1,000 hours)</option></select></label>
+          <label>Expected stylus life in hours<input class="field" id="cLife" type="number" min="50" step="50"></label>
+          <label>Minutes per play (a full LP, both sides, is about 40)<input class="field" id="cMin" type="number" min="5" max="240" step="1"></label>
+          <label>Hours on this cartridge before you started logging<input class="field" id="cPrior" type="number" min="0" step="1"></label>
+          <button class="play" type="submit">Save these</button>
+        </form>
+        <form id="cartNew" class="box">
+          <span class="t" id="cartNewHead">Which cartridge are you using?</span>
+          <label>Model<input class="field" id="cNewModel" placeholder="Ortofon 2M Blue" autocomplete="off"></label>
+          <span class="m" id="cGuess"></span>
+          <label>Date it went in<input class="field" id="cNewDate" type="date"></label>
+          <button class="ghost" type="submit">Start counting it</button>
+        </form>
+        <ul class="list" id="cartHist" hidden></ul>
+        <span class="m" id="cartMsg" role="status"></span>
+      </div>
+    </details>
+  </div>
+
+  <section class="note box" id="setup" hidden style="margin-top:0">
+    <span class="t">Welcome. Type your Discogs username to load your collection.</span>
+    <form id="setupForm" class="row"><input class="field" id="userIn" placeholder="Discogs username" autocomplete="off" autocapitalize="off" spellcheck="false" style="flex:1;min-width:180px"><button class="play" type="submit">Load</button></form>
+    <span class="m" id="setupMsg" role="status">Your collection needs to be public on Discogs. There's no sign-in: Disc Logs only reads what Discogs already shows the public, and your plays are saved only on this device.</span>
+  </section>
+
+  <div id="app" hidden>
+    <section class="stats" aria-label="Totals">
+      <div class="stat"><b id="sTotal">0</b><span>plays logged</span></div>
+      <div class="stat"><b id="sMonth">0</b><span>this month</span></div>
+      <div class="stat"><b id="sRecords">0</b><span>records played</span></div>
+    </section>
+    <div class="tabs" role="tablist" style="margin-top:14px">
+      <button role="tab" id="tab-log" aria-selected="true" data-p="p-log">Log a play</button>
+      <button role="tab" id="tab-top" aria-selected="false" data-p="p-top">Most played</button>
+      <button role="tab" id="tab-recent" aria-selected="false" data-p="p-recent">Recent</button>
+    </div>
+    <section class="panel" id="p-log" style="margin-top:14px">
+      <div class="qwrap"><input class="search" id="q" type="search" placeholder="Search artist or title" autocomplete="off" aria-label="Search your records"><button type="button" class="qclear" id="qClear" aria-label="Clear search" hidden>&times;</button></div>
+      <p class="note cartAlert" id="cartAlert" hidden style="margin-top:10px"></p>
+      <p class="hint" id="qhint" style="margin:10px 0"></p>
+      <ul class="list" id="results"></ul>
+    </section>
+    <section class="panel" id="p-top" hidden style="margin-top:14px"><ul class="list" id="toplist"></ul></section>
+    <section class="panel" id="p-recent" hidden style="margin-top:14px">
+      <ul class="list" id="recentlist"></ul>
+      <p class="hint" style="margin-top:10px">Only played one side? Tap One side. Logged one by mistake? Tap Remove.</p>
+    </section>
+  </div>
+  <footer>Disc Logs is not made by or affiliated with Discogs. Record data and images come from Discogs.</footer>
+</main>
+<div class="toast" id="toast" role="status" hidden><span id="toastMsg"></span><button id="sideBtn" type="button">Just one side</button><button id="undoBtn" type="button">Undo</button></div>
+<script src="app.js"></script>
+</body>
+</html>
