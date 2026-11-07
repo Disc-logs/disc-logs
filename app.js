@@ -207,6 +207,7 @@ const dparse = v => { if (!v) return null; const [y, mo, da] = v.split('-').map(
 function cartStats() { const c = CART.current || {}, since = c.installed || 0; const evs = allEvents().filter(e => e.t >= since);
   const units = evs.reduce((a, e) => a + (isHalf(e.rid, e.t) ? .5 : 1), 0);
   const hours = units * (Number(CART.minutes) || 40) / 60 + (Number(c.prior) || 0); const life = Number(CART.life) || 1000; return {n:evs.length, hours, life, pct:hours / life}; }
+let cartDirty = false;
 function renderCart() { const c = CART.current || {}, st = cartStats(), h = Math.round(st.hours), pct = Math.min(100, Math.round(st.pct * 100));
   $('cartModel').textContent = c.model || 'Your cartridge (add its model below)';
   $('cartNewHead').textContent = c.model ? 'Replaced your cartridge with a different one?' : 'Which cartridge are you using?';
@@ -221,11 +222,12 @@ function renderCart() { const c = CART.current || {}, st = cartStats(), h = Math
   else a.hidden = true;
   const hist = (CART.history || []).slice().reverse(); $('cartHist').hidden = !hist.length;
   $('cartHist').innerHTML = hist.map(x => `<li class="block"><div class="t">${esc(x.model || 'Cartridge')}</div><div class="m">${x.installed ? new Date(x.installed).toLocaleDateString() : '?'} to ${new Date(x.removed).toLocaleDateString()} · about ${Math.round(x.hours || 0).toLocaleString()} hours</div></li>`).join('');
-  if (document.activeElement && document.activeElement.closest && document.activeElement.closest('#cartSettings')) return;
+  if (cartDirty || (document.activeElement && document.activeElement.closest && document.activeElement.closest('#cartSettings'))) return;
   $('cInst').value = dstr(c.installed); $('cShape').value = c.shape || guessShape(c.model || '') || 'unknown'; $('cLife').value = CART.life; $('cMin').value = CART.minutes; $('cPrior').value = c.prior || 0; }
 function saveCart(msg) { $('cartMsg').textContent = store.set('cart', CART) ? msg : 'This browser won\'t save that (private browsing may be on).'; render(); }
 $('cShape').addEventListener('change', () => { const h = SHAPES[$('cShape').value]; if (h) $('cLife').value = h; });
-$('cartSettings').addEventListener('submit', e => { e.preventDefault();
+['input', 'change'].forEach(ev => $('cartSettings').addEventListener(ev, () => { cartDirty = true; }));
+$('cartSettings').addEventListener('submit', e => { e.preventDefault(); cartDirty = false;
   CART.current.installed = dparse($('cInst').value); CART.current.shape = $('cShape').value; CART.life = Math.max(50, Number($('cLife').value) || 1000);
   CART.minutes = Math.max(5, Number($('cMin').value) || 40); CART.current.prior = Math.max(0, Number($('cPrior').value) || 0);
   if (document.activeElement && document.activeElement.blur) document.activeElement.blur(); saveCart('Saved.'); });
