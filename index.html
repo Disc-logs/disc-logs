@@ -127,16 +127,16 @@ footer{color:var(--muted);font-size:.8rem;text-align:center}
     <details id="cartBox">
       <summary>Cartridge<span id="cartLeft"></span></summary>
       <div class="box">
+        <span class="t">Your current cartridge</span>
         <div class="t" id="cartModel"></div>
         <div class="bar"><i id="cartBar" style="width:0%"></i></div>
         <span class="m" id="cartLine"></span>
-        <span class="m">Hours are an estimate: each logged play counts as the minutes per play below, and a play marked one side counts as half. Type your cartridge's model and Disc Logs sets the stylus shape and expected life for many popular ones, using Audio-Technica's published figures for each shape. If yours isn't recognized, pick the shape yourself; it's in the maker's specs. Disc Logs reminds you at 80%.</span>
         <form id="cartSettings" class="box">
-          <span class="t">Your current cartridge</span>
           <label>Date it went in (leave blank if you don't know)<input class="field" id="cInst" type="date"></label>
           <label>Stylus shape<select class="field" id="cShape"><option value="unknown">Not sure</option><option value="conical">Conical / spherical (about 400 hours)</option><option value="elliptical">Elliptical (about 300 hours)</option><option value="shibata">Shibata (about 800 hours)</option><option value="line">Line contact / Fine Line (about 800 hours)</option><option value="microline">MicroLine / Micro-ridge / Replicant (about 1,000 hours)</option></select></label>
           <label>Expected stylus life in hours<input class="field" id="cLife" type="number" min="50" step="50"></label>
-          <label>Minutes per play (a full LP, both sides, is about 40)<input class="field" id="cMin" type="number" min="5" max="240" step="1"></label>
+          <span class="m">Hours are an estimate: each logged play counts as the minutes per play below, and a play marked one side counts as half. Type your cartridge's model and Disc Logs sets the stylus shape and expected life for many popular ones, using Audio-Technica's published figures for each shape. If yours isn't recognized, pick the shape yourself; it's in the maker's specs. Disc Logs reminds you at 80%.</span>
+          <label>Minutes per play (a full LP is about 40)<input class="field" id="cMin" type="number" min="5" max="240" step="1"></label>
           <label>Hours on this cartridge before you started logging<input class="field" id="cPrior" type="number" min="0" step="1"></label>
           <button class="play" type="submit">Save these</button>
         </form>
