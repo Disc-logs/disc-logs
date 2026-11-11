@@ -330,7 +330,7 @@ $('restoreFile').addEventListener('change', async e => { const f = e.target.file
 
 
 /* ---- look (saved on this device) ---- */
-const LOOK_COLORS = {day:'#eef0f2', red:'#f4f4f2', meter:'#111316', walnut:'#2a1c13', metal:'#000000', horror:'#0a0d0e'};
+const LOOK_COLORS = {day:'#eef0f2', red:'#f4f4f2', meter:'#111316', walnut:'#2a1c13', metal:'#000000', horror:'#0a0d0e', sxe:'#0a0a0a'};
 let LOOK = store.get('look', 'day'); if (!LOOK_COLORS[LOOK]) LOOK = 'day';
 function applyLook() { document.documentElement.dataset.look = LOOK; const m = document.querySelector('meta[name="theme-color"]'); if (m) m.content = LOOK_COLORS[LOOK];
   document.querySelectorAll('input[name="look"]').forEach(r => { r.checked = r.value === LOOK; }); }

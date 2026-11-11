@@ -84,11 +84,12 @@ details>summary{cursor:pointer;font-weight:700;font-size:1.05rem}
 a{color:var(--blue)}
 footer{color:var(--muted);font-size:.8rem;text-align:center}
 
-/* Title fonts for some looks, used unmodified under the SIL Open Font License 1.1 (licenses in the fonts folder): New Rocker (c) 2011 Pablo Impallari, Brenda Gallo and Rodrigo Fuenzalida; Metal Mania (c) 2012 Open Window; Creepster (c) 2011 Font Diner, Inc.; Rubik Wet Paint (c) 2020 The Rubik Filtered Project Authors. */
+/* Title fonts for some looks, used unmodified under the SIL Open Font License 1.1 (licenses in the fonts folder): New Rocker (c) 2011 Pablo Impallari, Brenda Gallo and Rodrigo Fuenzalida; Metal Mania (c) 2012 Open Window; Creepster (c) 2011 Font Diner, Inc.; Rubik Wet Paint (c) 2020 The Rubik Filtered Project Authors; Anton (c) 2020 The Anton Project Authors. */
 @font-face{font-family:'New Rocker';src:url(fonts/NewRocker-Regular.ttf) format('truetype');font-display:swap}
 @font-face{font-family:'Metal Mania';src:url(fonts/MetalMania-Regular.ttf) format('truetype');font-display:swap}
 @font-face{font-family:'Creepster';src:url(fonts/Creepster-Regular.ttf) format('truetype');font-display:swap}
 /* Rubik Wet Paint, Copyright 2020 The Rubik Filtered Project Authors, SIL Open Font License 1.1; trimmed to the letters of the title. */
+@font-face{font-family:'Anton';src:url(fonts/Anton-Regular.ttf) format('truetype');font-display:swap}
 @font-face{font-family:'Wet Paint Title';src:url(fonts/RubikWetPaint-DiscLogs.woff) format('woff');font-display:swap}
 :root{--s33:rgba(31,79,209,.6);--s45:rgba(30,150,60,.7);--monobg:linear-gradient(135deg,#e6f4e6,#dcefdc);--on-bg:#e7ecfb;--on-line:#9fb3ec;--on-ink:var(--blue);--again-bg:#e6f4e6;--again-ink:#1d7a33;--again-line:#9dd1a8}
 main>header{position:sticky;top:0;z-index:30;background:var(--bg);margin:-16px -14px 0;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;box-shadow:0 6px 10px -8px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:10px}
@@ -179,6 +180,29 @@ html[data-look="horror"] .search,html[data-look="horror"] .hrsBox,html[data-look
 html[data-look="horror"] .hrsBox{flex-direction:row;gap:6px;padding:0 9px 0 7px}html[data-look="horror"] .hg{display:block;width:22px;height:34px;flex:none;filter:drop-shadow(0 0 4px rgba(224,22,47,.55))}
 .hgFlow{stroke-dasharray:1.2 1.6;animation:hgFall 1.1s linear infinite}@keyframes hgFall{to{stroke-dashoffset:-5.6}}
 @media (prefers-reduced-motion:reduce){.hgFlow{animation:none}}
+/* ---- Straight Edge ---- */
+html[data-look="sxe"]{--bg:#ecebe6;--panel:#fbfbf8;--ink:#0a0a0a;--muted:#4a4a48;--line:#0a0a0a;--blue:#0a0a0a;--blue2:#000;--gold:#e1061b;--s33:#0a0a0a;--s45:#e1061b;--monobg:radial-gradient(circle,rgba(0,0,0,.16) 1px,transparent 1.4px) 0 0/6px 6px,#fbfbf8;--on-bg:#e1061b;--on-line:#e1061b;--on-ink:#fff;--again-bg:#0a0a0a;--again-ink:#fff;--again-line:#0a0a0a}
+html[data-look="sxe"] body{background:radial-gradient(circle at 20% 30%,rgba(0,0,0,.05),transparent 40%),radial-gradient(circle at 80% 70%,rgba(0,0,0,.06),transparent 45%),repeating-radial-gradient(circle at 40% 60%,rgba(0,0,0,.035) 0 1px,transparent 1px 3px),#ecebe6 fixed}
+html[data-look="sxe"] main>header{background:#0a0a0a;box-shadow:0 4px 0 #e1061b}
+html[data-look="sxe"] h1{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:clamp(1.9rem,10vw,2.7rem);letter-spacing:.02em;text-transform:uppercase;color:#fbfbf8;line-height:.95}
+html[data-look="sxe"] h1::after{content:"XXX";color:#e1061b;margin-left:.15em;letter-spacing:-.02em;transform:rotate(-4deg);display:inline-block}
+html[data-look="sxe"] .disc{background:#fbfbf8}html[data-look="sxe"] .disc::after{background:radial-gradient(circle,#fbfbf8 0 2px,#e1061b 2.6px)}
+html[data-look="sxe"] .menuBtn{background:#0a0a0a;color:#fbfbf8;border:2px solid #fbfbf8;border-radius:0}
+html[data-look="sxe"] .search{border:3px solid #fbfbf8;border-radius:0;background:#fbfbf8;font-weight:700}
+html[data-look="sxe"] .hrsBox{border:3px solid #fbfbf8;border-radius:0;background:#e1061b;color:#fff}html[data-look="sxe"] .hrsBox span{color:#fff}
+html[data-look="sxe"] .hrsBox b{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.25rem}
+html[data-look="sxe"] .stat,html[data-look="sxe"] .list li,html[data-look="sxe"] details,html[data-look="sxe"] .tabs,html[data-look="sxe"] .note{border:3px solid #0a0a0a;border-radius:0;box-shadow:5px 5px 0 #0a0a0a}
+html[data-look="sxe"] .list li.s45{box-shadow:5px 5px 0 #e1061b;border-color:#0a0a0a}html[data-look="sxe"] .list li.s33{box-shadow:5px 5px 0 #0a0a0a}
+html[data-look="sxe"] .stat b,html[data-look="sxe"] .count{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:2.1rem;color:#0a0a0a}
+html[data-look="sxe"] .stat span,html[data-look="sxe"] .tabs button,html[data-look="sxe"] .play,html[data-look="sxe"] .ghost,html[data-look="sxe"] .sch{text-transform:uppercase;font-weight:800;letter-spacing:.04em}
+html[data-look="sxe"] .tabs button{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1.05rem;color:#0a0a0a;border-radius:0}
+html[data-look="sxe"] .tabs button[aria-selected="true"]{background:#0a0a0a;color:#fff}
+html[data-look="sxe"] .play{background:#0a0a0a;color:#fff;border-radius:0;font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:1rem}
+html[data-look="sxe"] .ghost,html[data-look="sxe"] .sch{border:2px solid #0a0a0a;border-radius:0;color:#0a0a0a}
+html[data-look="sxe"] .t{font-family:'Anton',Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:1rem!important}
+html[data-look="sxe"] .cov{border-radius:0;filter:grayscale(1) contrast(1.35);box-shadow:0 0 0 2px #0a0a0a}
+html[data-look="sxe"] .qclear{background:#0a0a0a;color:#fff;border-radius:0}
+html[data-look="sxe"] .rank{color:#e1061b}
 </style>
 </head>
 <body>
@@ -235,6 +259,7 @@ html[data-look="horror"] .hrsBox{flex-direction:row;gap:6px;padding:0 9px 0 7px}
         <label class="lookOpt"><input type="radio" name="look" value="walnut"><span class="sw" style="background:linear-gradient(135deg,#5b3a24 50%,#d9a441 50%)"></span><span><b>Walnut</b><small>Warm wood and brass</small></span></label>
         <label class="lookOpt"><input type="radio" name="look" value="metal"><span class="sw" style="background:linear-gradient(135deg,#000 50%,#d10a1a 50%)"></span><span><b>Metal</b><small>Riveted steel, smoke, red-hot glow</small></span></label>
         <label class="lookOpt"><input type="radio" name="look" value="horror"><span class="sw" style="background:radial-gradient(circle at 75% 25%,#d4142b,#2a3a3e 60%,#0a0d0e)"></span><span><b>Horror</b><small>Grimy fog, red neon glow, faded covers</small></span></label>
+        <label class="lookOpt"><input type="radio" name="look" value="sxe"><span class="sw" style="background:linear-gradient(135deg,#0a0a0a 50%,#fbfbf8 50%);box-shadow:inset 0 0 0 2px #e1061b"></span><span><b>Straight Edge</b><small>Black and white photocopy, bold type, red X's</small></span></label>
       </div>
     </details>
     <details id="cartBox">
