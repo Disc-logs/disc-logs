@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Security: this page may only run its own script (app.js), talk to the Discogs API, and show Discogs cover images. Nothing else. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.discogs.com; connect-src https://api.discogs.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://i.discogs.com; font-src 'self'; connect-src https://api.discogs.com; manifest-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>Disc Logs</title>
 <meta name="description" content="A free play tracker for your Discogs record collection. No sign-in; your plays stay on your phone.">
@@ -83,6 +83,102 @@ details>summary{cursor:pointer;font-weight:700;font-size:1.05rem}
 #toastMsg{font-size:.92rem}
 a{color:var(--blue)}
 footer{color:var(--muted);font-size:.8rem;text-align:center}
+
+/* Title fonts for some looks, used unmodified under the SIL Open Font License 1.1 (licenses in the fonts folder): New Rocker (c) 2011 Pablo Impallari, Brenda Gallo and Rodrigo Fuenzalida; Metal Mania (c) 2012 Open Window; Creepster (c) 2011 Font Diner, Inc.; Rubik Wet Paint (c) 2020 The Rubik Filtered Project Authors. */
+@font-face{font-family:'New Rocker';src:url(fonts/NewRocker-Regular.ttf) format('truetype');font-display:swap}
+@font-face{font-family:'Metal Mania';src:url(fonts/MetalMania-Regular.ttf) format('truetype');font-display:swap}
+@font-face{font-family:'Creepster';src:url(fonts/Creepster-Regular.ttf) format('truetype');font-display:swap}
+/* Rubik Wet Paint, Copyright 2020 The Rubik Filtered Project Authors, SIL Open Font License 1.1; trimmed to the letters of the title. */
+@font-face{font-family:'Wet Paint Title';src:url(fonts/RubikWetPaint-DiscLogs.woff) format('woff');font-display:swap}
+:root{--s33:rgba(31,79,209,.6);--s45:rgba(30,150,60,.7);--monobg:linear-gradient(135deg,#e6f4e6,#dcefdc);--on-bg:#e7ecfb;--on-line:#9fb3ec;--on-ink:var(--blue);--again-bg:#e6f4e6;--again-ink:#1d7a33;--again-line:#9dd1a8}
+main>header{position:sticky;top:0;z-index:30;background:var(--bg);margin:-16px -14px 0;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;box-shadow:0 6px 10px -8px rgba(0,0,0,.35);display:flex;flex-direction:column;gap:10px}
+.searchRow{display:flex;gap:8px;align-items:stretch}.searchRow .qwrap{flex:1;min-width:0}
+.hrsBox{min-height:44px;min-width:70px;padding:0 9px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;cursor:pointer;font-family:var(--body)}
+.hrsBox b{font-size:1.02rem;font-weight:800}.hrsBox span{font-size:.66rem;color:var(--muted);font-weight:600}
+.hrsBox.lvl-yellow{background:#f2c94c;border-color:#e0b43a;color:#3a2c00}.hrsBox.lvl-yellow span{color:#3a2c00}
+.hrsBox.lvl-red{background:#c8553d;border-color:#b8432f;color:#fff}.hrsBox.lvl-red span{color:#fff}
+.hrsBox.lvl-fire{background:#ce2029;border-color:#a3141c;color:#fff}.hrsBox.lvl-fire span{color:#fff}
+#results>li:not(.empty),#toplist>li:not(.empty),#recentlist>li:not(.empty){grid-template-columns:84px 1fr auto;gap:11px;padding:9px 10px}
+#results .cov,#toplist .cov,#recentlist .cov{width:84px;height:84px;border-radius:7px}
+#results .t,#toplist .t,#recentlist .t{font-size:.92rem}#results .a,#toplist .a,#recentlist .a{font-size:.86rem}#results .m,#toplist .m,#recentlist .m{font-size:.76rem}
+#recentlist .sides{grid-column:1/-1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.sch{min-width:34px;height:32px;padding:0 8px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--muted);font:700 .85rem var(--body);cursor:pointer}
+.sch.on{background:var(--on-bg);border-color:var(--on-line);color:var(--on-ink)}
+#recentlist .rbtns .ghost.again{background:var(--again-bg);color:var(--again-ink);border-color:var(--again-line);font-weight:600}
+.list li.s33{border-color:var(--s33);box-shadow:inset 0 0 0 1px var(--s33)}.list li.s45{border-color:var(--s45);box-shadow:inset 0 0 0 1px var(--s45)}
+.list li.mono{background:var(--monobg)}
+.check{display:flex!important;flex-direction:row!important;gap:8px;align-items:flex-start;color:var(--ink)!important;font-size:.88rem!important}.check input{margin-top:3px;width:18px;height:18px;flex:none}
+.looks{gap:6px}.lookOpt{display:flex!important;flex-direction:row!important;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;cursor:pointer;color:var(--ink)!important}
+.lookOpt input{width:18px;height:18px;flex:none}.lookOpt .sw{width:30px;height:30px;border-radius:8px;flex:none}.lookOpt b{display:block;font-size:.95rem}.lookOpt small{color:var(--muted);font-size:.8rem}
+.lookOpt:has(input:checked){border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+/* ---- Minimal Red ---- */
+html[data-look="red"]{--bg:#f4f4f2;--panel:#fff;--ink:#111;--muted:#6b6b6b;--line:#e2e2df;--blue:#d6001c;--blue2:#b00017;--gold:#d6001c;--s33:rgba(17,17,17,.55);--s45:rgba(214,0,28,.7);--monobg:linear-gradient(135deg,#f3f3f1,#e9e9e6);--on-bg:#111;--on-line:#111;--on-ink:#fff;--again-bg:#fff;--again-ink:#d6001c;--again-line:#d6001c}
+html[data-look="red"] h1{font-weight:300;letter-spacing:.06em;text-transform:lowercase}
+html[data-look="red"] .disc{background:#fff;box-shadow:inset 0 0 0 2px #111}html[data-look="red"] .disc::after{background:radial-gradient(circle,#fff 0 2px,#d6001c 2.6px)}
+html[data-look="red"] .tabs button[aria-selected="true"]{background:#111}
+html[data-look="red"] .stat b{color:#d6001c}
+/* ---- Blue Meter ---- */
+html[data-look="meter"]{--bg:#111316;--panel:#1a1d21;--ink:#e6e9ed;--muted:#8d959e;--line:#2b3036;--blue:#4fb3ff;--blue2:#3a9be6;--gold:#4cf03e;--s33:rgba(79,179,255,.78);--s45:rgba(76,240,62,.6);--monobg:linear-gradient(135deg,#16301a,#112414);--on-bg:#0c2410;--on-line:#26662a;--on-ink:#4cf03e;--again-bg:#0c2410;--again-ink:#4cf03e;--again-line:#26662a;color-scheme:dark}
+html[data-look="meter"] h1{font-family:'New Rocker',var(--body);font-weight:400;color:#4cf03e;text-shadow:0 0 10px rgba(76,240,62,.45)}
+html[data-look="meter"] .stat b{color:#4fb3ff;font-weight:500}
+html[data-look="meter"] .play,html[data-look="meter"] .tabs button[aria-selected="true"],html[data-look="meter"] .menuBtn[aria-expanded="true"]{background:#0b1d2c;color:#4fb3ff;box-shadow:inset 0 0 0 1px #1d4f7a}
+html[data-look="meter"] .hrsBox{background:#0b1d2c;border-color:#1d4f7a;color:#4fb3ff}html[data-look="meter"] .hrsBox span{color:#7fb7e0}
+html[data-look="meter"] .count{color:#4cf03e}
+html[data-look="meter"] .cov{background:#2b3036}html[data-look="meter"] .qclear{background:#2b3036;color:#e6e9ed}
+html[data-look="meter"] .toast{background:#0b1d2c;color:#4fb3ff;box-shadow:inset 0 0 0 1px #1d4f7a,0 6px 24px rgba(0,0,0,.5)}
+/* ---- Walnut ---- */
+html[data-look="walnut"]{--bg:#2a1c13;--panel:#3a281b;--ink:#f3e6d2;--muted:#c2ab8c;--line:#5a4130;--blue:#d9a441;--blue2:#c28f2f;--gold:#d9a441;--s33:rgba(217,164,65,.7);--s45:rgba(140,200,120,.7);--monobg:linear-gradient(135deg,#3b3320,#33301c);--on-bg:#d9a441;--on-line:#d9a441;--on-ink:#2a1c13;--again-bg:#2a1c13;--again-ink:#d9a441;--again-line:#d9a441;color-scheme:dark}
+html[data-look="walnut"] main>header{background:linear-gradient(180deg,#4a2f1e,#2a1c13)}
+html[data-look="walnut"] h1{font-family:Georgia,"Times New Roman",serif;font-weight:700;color:#e8c27a}
+html[data-look="walnut"] .play,html[data-look="walnut"] .tabs button[aria-selected="true"]{background:#d9a441;color:#2a1c13}
+html[data-look="walnut"] .stat b{color:#e8c27a}html[data-look="walnut"] .cov{background:#5a4130}
+
+/* ---- Metal ---- */
+html[data-look="metal"]{--bg:#050505;--panel:#111;--ink:#f2f2f2;--muted:#9a9a9a;--line:#3a3a3a;--blue:#d10a1a;--blue2:#a00813;--gold:#d10a1a;--s33:rgba(200,200,205,.5);--s45:rgba(235,25,35,.9);--monobg:linear-gradient(135deg,#2b0306,#120203);--on-bg:#d10a1a;--on-line:#ff2a3a;--on-ink:#fff;--again-bg:#0b0b0b;--again-ink:#ff2a3a;--again-line:#d10a1a;color-scheme:dark}
+html[data-look="metal"] body{background:
+  radial-gradient(40% 30% at 0% 100%,rgba(255,40,20,.35),transparent 70%),
+  radial-gradient(40% 30% at 100% 100%,rgba(255,40,20,.35),transparent 70%),
+  radial-gradient(60% 40% at 20% 15%,rgba(180,180,180,.07),transparent 70%),
+  radial-gradient(50% 35% at 85% 35%,rgba(180,180,180,.06),transparent 70%),
+  repeating-linear-gradient(115deg,rgba(255,255,255,.02) 0 2px,transparent 2px 5px),
+  #050505 fixed}
+html[data-look="metal"] main>header{background:radial-gradient(circle at 7px 7px,#9a9a9a 0 1.4px,#3a3a3a 1.6px 2.6px,transparent 3px),radial-gradient(circle at calc(100% - 7px) 7px,#9a9a9a 0 1.4px,#3a3a3a 1.6px 2.6px,transparent 3px),radial-gradient(circle at 7px calc(100% - 7px),#9a9a9a 0 1.4px,#3a3a3a 1.6px 2.6px,transparent 3px),radial-gradient(circle at calc(100% - 7px) calc(100% - 7px),#9a9a9a 0 1.4px,#3a3a3a 1.6px 2.6px,transparent 3px),linear-gradient(180deg,#2a2a2a,#141414 40%,#0a0a0a);border-bottom:2px solid #000;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 2px 0 #d10a1a,0 12px 22px -8px rgba(209,10,26,.6)}
+html[data-look="metal"] h1{font-family:'Metal Mania',var(--body);font-weight:400;font-size:clamp(1.8rem,9.6vw,2.6rem);letter-spacing:.03em;color:#fff;-webkit-text-stroke:1px #000;text-shadow:2px 2px 0 #d10a1a,-1px -1px 0 #000,0 0 16px rgba(255,30,40,.8)}
+html[data-look="metal"] .disc{background:conic-gradient(#888,#222,#aaa,#333,#888);box-shadow:inset 0 0 0 2px #000}html[data-look="metal"] .disc::after{background:radial-gradient(circle,#000 0 2px,#d10a1a 2.6px)}
+html[data-look="metal"] .stat,html[data-look="metal"] .list li,html[data-look="metal"] details,html[data-look="metal"] .tabs{border-radius:3px;background:radial-gradient(circle at 7px 7px,#9a9a9a 0 1.4px,#3a3a3a 1.6px 2.6px,transparent 3px),radial-gradient(circle at calc(100% - 7px) 7px,#9a9a9a 0 1.4px,#3a3a3a 1.6px 2.6px,transparent 3px),radial-gradient(circle at 7px calc(100% - 7px),#9a9a9a 0 1.4px,#3a3a3a 1.6px 2.6px,transparent 3px),radial-gradient(circle at calc(100% - 7px) calc(100% - 7px),#9a9a9a 0 1.4px,#3a3a3a 1.6px 2.6px,transparent 3px),repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),linear-gradient(180deg,#1e1e1e,#0b0b0b);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 -1px 0 #000}
+html[data-look="metal"] .list li{padding-left:16px!important;padding-right:16px!important}
+html[data-look="metal"] .search,html[data-look="metal"] .hrsBox,html[data-look="metal"] .menuBtn{border-radius:3px;background:linear-gradient(180deg,#1a1a1a,#080808);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+html[data-look="metal"] .play,html[data-look="metal"] .ghost,html[data-look="metal"] .sch,html[data-look="metal"] .tabs button,html[data-look="metal"] .cov{border-radius:2px}
+html[data-look="metal"] .stat b,html[data-look="metal"] .count{color:#fff;font-family:'Metal Mania',var(--body);font-weight:400;font-size:1.8rem;text-shadow:1px 1px 0 #d10a1a,0 0 10px rgba(255,30,40,.6)}
+html[data-look="metal"] .stat span,html[data-look="metal"] .tabs button,html[data-look="metal"] .play,html[data-look="metal"] .ghost{text-transform:uppercase;letter-spacing:.08em;font-size:.78rem}
+html[data-look="metal"] .play,html[data-look="metal"] .tabs button[aria-selected="true"]{background:linear-gradient(180deg,#ff2a35,#b00812 50%,#6a040b);color:#fff;text-shadow:0 1px 0 #000;box-shadow:inset 0 1px 0 rgba(255,255,255,.3),0 0 10px -2px rgba(255,30,40,.6)}
+html[data-look="metal"] .t{text-transform:uppercase;letter-spacing:.05em;font-weight:800;font-size:.84rem!important}
+html[data-look="metal"] .cov{background:#1a1a1a;filter:contrast(1.2) saturate(1.1);box-shadow:0 0 0 1px #000,0 0 0 2px #444}html[data-look="metal"] .qclear{background:#2a2a2a;color:#eee;border-radius:2px}
+/* ---- Horror ---- */
+html[data-look="horror"]{--bg:#0a0d0e;--panel:#121617;--ink:#d9dcd4;--muted:#7f8a84;--line:#253032;--blue:#d4142b;--blue2:#9e0c1f;--gold:#d4142b;--s33:rgba(160,180,170,.45);--s45:rgba(230,20,45,.85);--monobg:linear-gradient(160deg,#1b2224,#0d1112);--on-bg:#d4142b;--on-line:#ff3049;--on-ink:#f4efe8;--again-bg:#0a0d0e;--again-ink:#ff3049;--again-line:#6a0a16;color-scheme:dark}
+html[data-look="horror"] body{background:
+  radial-gradient(60% 45% at 85% 8%,rgba(200,10,30,.42),transparent 70%),
+  radial-gradient(70% 60% at 0% 30%,rgba(40,80,90,.35),transparent 70%),
+  radial-gradient(120% 80% at 50% 110%,rgba(0,0,0,.9),transparent 60%),
+  repeating-radial-gradient(circle at 30% 40%,rgba(255,255,255,.012) 0 1px,transparent 1px 3px),
+  #0a0d0e fixed}
+html[data-look="horror"] main>header{background:radial-gradient(70% 160% at 80% 0%,rgba(190,10,30,.55),rgba(10,13,14,.96) 70%),#0a0d0e;box-shadow:0 14px 24px -12px #000}
+html[data-look="horror"] h1{font-family:'Wet Paint Title','Creepster',var(--body);font-weight:400;font-size:clamp(1.7rem,9vw,2.45rem);letter-spacing:.02em;color:#ffd9dc;text-shadow:0 0 2px #fff,0 0 8px #ff2a40,0 0 18px #e0102a,0 0 34px rgba(200,0,25,.8);animation:dlFlicker 7s infinite}
+@keyframes dlFlicker{0%,91%,94%,100%{opacity:1}92%{opacity:.55}93%{opacity:.9}95%{opacity:.7}}
+@media (prefers-reduced-motion:reduce){html[data-look="horror"] h1{animation:none}}
+html[data-look="horror"] .disc{background:#cfd4cc;box-shadow:0 0 14px rgba(255,40,60,.45)}html[data-look="horror"] .disc::after{background:radial-gradient(circle,#cfd4cc 0 2px,#0a0d0e 2.6px)}
+html[data-look="horror"] .stat,html[data-look="horror"] .list li,html[data-look="horror"] details,html[data-look="horror"] .tabs{background:linear-gradient(170deg,rgba(28,34,35,.92),rgba(10,13,14,.94));box-shadow:inset 0 0 28px rgba(0,0,0,.85)}
+html[data-look="horror"] .list li{box-shadow:inset 0 0 28px rgba(0,0,0,.85),0 0 12px -5px rgba(212,20,43,.5)}
+html[data-look="horror"] .stat b,html[data-look="horror"] .count{color:#ffd9dc;font-family:'Creepster',var(--body);font-weight:400;font-size:1.8rem;letter-spacing:.05em;text-shadow:0 0 6px #ff2a40,0 0 16px rgba(200,0,25,.7)}
+html[data-look="horror"] .stat span{font-style:italic}
+html[data-look="horror"] .play,html[data-look="horror"] .tabs button[aria-selected="true"]{background:linear-gradient(180deg,#c8102a,#55060f);color:#fbeff0;text-shadow:0 1px 0 #000;box-shadow:0 0 12px -2px rgba(230,20,45,.6)}
+html[data-look="horror"] .cov{background:#1f2627;filter:grayscale(.65) sepia(.25) contrast(1.15) brightness(.82)}
+html[data-look="horror"] .t{font-family:Georgia,"Times New Roman",serif;letter-spacing:.02em}
+html[data-look="horror"] .search,html[data-look="horror"] .hrsBox,html[data-look="horror"] .menuBtn{background:rgba(14,18,19,.85)}html[data-look="horror"] .qclear{background:#253032;color:#eee}
+.hg{display:none}.hrsBox .hbT{display:flex;flex-direction:column;align-items:center;font-size:inherit;color:inherit;font-weight:inherit}
+html[data-look="horror"] .hrsBox{flex-direction:row;gap:6px;padding:0 9px 0 7px}html[data-look="horror"] .hg{display:block;width:22px;height:34px;flex:none;filter:drop-shadow(0 0 4px rgba(224,22,47,.55))}
+.hgFlow{stroke-dasharray:1.2 1.6;animation:hgFall 1.1s linear infinite}@keyframes hgFall{to{stroke-dashoffset:-5.6}}
+@media (prefers-reduced-motion:reduce){.hgFlow{animation:none}}
 </style>
 </head>
 <body>
@@ -91,6 +187,10 @@ footer{color:var(--muted);font-size:.8rem;text-align:center}
     <div class="topbar">
       <h1><span class="disc" aria-hidden="true"></span>Disc Logs</h1>
       <button type="button" class="menuBtn" id="menuBtn" aria-label="Menu" aria-expanded="false" aria-controls="menu"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="searchRow" id="searchRow" hidden>
+      <div class="qwrap"><input class="search" id="q" type="search" placeholder="Search artist or title" autocomplete="off" aria-label="Search your records"><button type="button" class="qclear" id="qClear" aria-label="Clear search" hidden>&times;</button></div>
+      <button type="button" class="hrsBox" id="hrsBox" aria-label="Cartridge hours left"><svg class="hg" viewBox="0 0 24 36" aria-hidden="true"><defs><clipPath id="hgTopC"><path d="M5.6 3.6H18.4C18.4 10 13.2 14 12.5 17.6H11.5C10.8 14 5.6 10 5.6 3.6Z"/></clipPath><clipPath id="hgBotC"><path d="M11.5 18.4H12.5C13.2 22 18.4 26 18.4 32.4H5.6C5.6 26 10.8 22 11.5 18.4Z"/></clipPath></defs><rect id="hgTop" clip-path="url(#hgTopC)" x="0" y="4" width="24" height="14" fill="#c4001c"/><rect id="hgBot" clip-path="url(#hgBotC)" x="0" y="33" width="24" height="0" fill="#c4001c"/><line id="hgFlow" class="hgFlow" x1="12" y1="18" x2="12" y2="32.4" stroke="#e0162f" stroke-width=".9"/><path d="M5 3H19C19 10 13.4 14 12.7 18C13.4 22 19 26 19 33H5C5 26 10.6 22 11.3 18C10.6 14 5 10 5 3Z" fill="none" stroke="#f2efe9" stroke-width="1.2" stroke-linejoin="round"/><path d="M3 2.2H21M3 33.8H21" stroke="#f2efe9" stroke-width="1.8" stroke-linecap="round"/></svg><span class="hbT"><b id="hrsLeft">Set up</b><span id="hrsUnit">cartridge</span></span></button>
     </div>
   </header>
 
@@ -105,6 +205,8 @@ footer{color:var(--muted);font-size:.8rem;text-align:center}
         <input class="field" id="fBarcode" placeholder="Barcode number" inputmode="numeric" autocomplete="off">
         <input class="field" id="fMatrix" placeholder="Runout / matrix (from the dead wax)" autocomplete="off">
         <input class="field" id="fYear" placeholder="Release year" inputmode="numeric" autocomplete="off">
+        <label class="check"><input type="checkbox" id="fGuest"> It's a guest's record (someone else's copy). It counts toward your cartridge, not your records.</label>
+        <div id="ownerWrap" hidden><input class="field" id="fOwner" placeholder="Whose record? (optional)" autocomplete="off" maxlength="40"></div>
         <button class="play" type="submit">Find it on Discogs</button>
         <span class="m" id="findMsg" role="status"></span>
       </form>
@@ -124,6 +226,17 @@ footer{color:var(--muted);font-size:.8rem;text-align:center}
         <span class="m" id="backupMsg" role="status"></span>
       </div>
     </details>
+    <details id="lookBox">
+      <summary>Look</summary>
+      <div class="box looks" id="looks" role="radiogroup" aria-label="Look">
+        <label class="lookOpt"><input type="radio" name="look" value="day"><span class="sw" style="background:linear-gradient(135deg,#eef0f2 50%,#1f4fd1 50%)"></span><span><b>Daylight</b><small>Light and simple, blue buttons</small></span></label>
+        <label class="lookOpt"><input type="radio" name="look" value="red"><span class="sw" style="background:linear-gradient(135deg,#fff 50%,#d6001c 50%);box-shadow:inset 0 0 0 1px #ccc"></span><span><b>Minimal Red</b><small>Gloss white, black type, a red accent</small></span></label>
+        <label class="lookOpt"><input type="radio" name="look" value="meter"><span class="sw" style="background:linear-gradient(135deg,#0b1d2c 50%,#4fb3ff 50%)"></span><span><b>Blue Meter</b><small>Black faceplate, glowing blue meters, green title</small></span></label>
+        <label class="lookOpt"><input type="radio" name="look" value="walnut"><span class="sw" style="background:linear-gradient(135deg,#5b3a24 50%,#d9a441 50%)"></span><span><b>Walnut</b><small>Warm wood and brass</small></span></label>
+        <label class="lookOpt"><input type="radio" name="look" value="metal"><span class="sw" style="background:linear-gradient(135deg,#000 50%,#d10a1a 50%)"></span><span><b>Metal</b><small>Riveted steel, smoke, red-hot glow</small></span></label>
+        <label class="lookOpt"><input type="radio" name="look" value="horror"><span class="sw" style="background:radial-gradient(circle at 75% 25%,#d4142b,#2a3a3e 60%,#0a0d0e)"></span><span><b>Horror</b><small>Grimy fog, red neon glow, faded covers</small></span></label>
+      </div>
+    </details>
     <details id="cartBox">
       <summary>Cartridge<span id="cartLeft"></span></summary>
       <div class="box">
@@ -135,8 +248,8 @@ footer{color:var(--muted);font-size:.8rem;text-align:center}
           <label>Date it went in (leave blank if you don't know)<input class="field" id="cInst" type="date"></label>
           <label>Stylus shape<select class="field" id="cShape"><option value="unknown">Not sure</option><option value="conical">Conical / spherical (about 400 hours)</option><option value="elliptical">Elliptical (about 300 hours)</option><option value="shibata">Shibata (about 800 hours)</option><option value="line">Line contact / Fine Line (about 800 hours)</option><option value="microline">MicroLine / Micro-ridge / Replicant (about 1,000 hours)</option></select></label>
           <label>Expected stylus life in hours<input class="field" id="cLife" type="number" min="50" step="50"></label>
-          <span class="m">Hours are an estimate: each logged play counts as the minutes per play below, and a play marked one side counts as half. Type your cartridge's model and Disc Logs sets the stylus shape and expected life for many popular ones, using Audio-Technica's published figures for each shape. If yours isn't recognized, pick the shape yourself; it's in the maker's specs. Disc Logs reminds you at 80%.</span>
-          <label>Minutes per play (a full LP is about 40)<input class="field" id="cMin" type="number" min="5" max="240" step="1"></label>
+          <span class="m">Hours are an estimate: each play counts the record's real running time from its Discogs track lengths, plus 5 seconds a side. When a record has no track times, an LP counts as the minutes below (half per side), a 12" single as 15 and a 7" as 8. Type your cartridge's model and Disc Logs sets the stylus shape and expected life for many popular ones, using Audio-Technica's published figures for each shape. If yours isn't recognized, pick the shape yourself; it's in the maker's specs. Disc Logs reminds you at 80%.</span>
+          <label>Minutes for an LP with no track times<input class="field" id="cMin" type="number" min="5" max="240" step="1"></label>
           <label>Hours on this cartridge before you started logging<input class="field" id="cPrior" type="number" min="0" step="1"></label>
           <button class="play" type="submit">Save these</button>
         </form>
@@ -171,20 +284,19 @@ footer{color:var(--muted);font-size:.8rem;text-align:center}
       <button role="tab" id="tab-recent" aria-selected="false" data-p="p-recent">Recent</button>
     </div>
     <section class="panel" id="p-log" style="margin-top:14px">
-      <div class="qwrap"><input class="search" id="q" type="search" placeholder="Search artist or title" autocomplete="off" aria-label="Search your records"><button type="button" class="qclear" id="qClear" aria-label="Clear search" hidden>&times;</button></div>
-      <p class="note cartAlert" id="cartAlert" hidden style="margin-top:10px"></p>
-      <p class="hint" id="qhint" style="margin:10px 0"></p>
+      <p class="note cartAlert" id="cartAlert" hidden style="margin:0 0 10px"></p>
+      <p class="hint" id="qhint" style="margin:0 0 10px"></p>
       <ul class="list" id="results"></ul>
     </section>
     <section class="panel" id="p-top" hidden style="margin-top:14px"><ul class="list" id="toplist"></ul></section>
     <section class="panel" id="p-recent" hidden style="margin-top:14px">
       <ul class="list" id="recentlist"></ul>
-      <p class="hint" style="margin-top:10px">Only played one side? Tap One side. Logged one by mistake? Tap Remove.</p>
+      <p class="hint" style="margin-top:10px">Tap the sides you heard (none picked means the whole record). Playing it again? Tap Play again. Logged one by mistake? Tap Remove.</p>
     </section>
   </div>
   <footer>Disc Logs is not made by or affiliated with Discogs. Record data and images come from Discogs.</footer>
 </main>
-<div class="toast" id="toast" role="status" hidden><span id="toastMsg"></span><button id="sideBtn" type="button">Just one side</button><button id="undoBtn" type="button">Undo</button></div>
+<div class="toast" id="toast" role="status" hidden><span id="toastMsg"></span><button id="undoBtn" type="button">Undo</button></div>
 <script src="app.js"></script>
 </body>
 </html>
