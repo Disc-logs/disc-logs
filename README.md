@@ -22,3 +22,4 @@ Type a Discogs username, and the page loads that user's **public** collection fr
 - `CNAME`: the custom domain for GitHub Pages
 
 Disc Logs is not made by or affiliated with Discogs.
+ 
